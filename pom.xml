@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>dev.serverest.qa</groupId>
+    <artifactId>qa-backend-test</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+    <name>QA Backend Test - ServeRest Usuarios API</name>
+    <description>Suite de pruebas automatizadas para la API de Usuarios de ServeRest con Karate DSL</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>17</maven.compiler.release>
+        <karate.version>1.4.1</karate.version>
+        <junit5.version>5.10.2</junit5.version>
+        <datafaker.version>2.1.0</datafaker.version>
+        <!-- Permite filtrar por tags desde CLI con -Dkarate.options -->
+        <karate.options></karate.options>
+        <karate.env></karate.env>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.intuit.karate</groupId>
+            <artifactId>karate-junit5</artifactId>
+            <version>${karate.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>net.datafaker</groupId>
+            <artifactId>datafaker</artifactId>
+            <version>${datafaker.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit5.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <testResources>
+            <testResource>
+                <directory>src/test/java</directory>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </testResource>
+        </testResources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <release>17</release>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+                <configuration>
+                    <!-- Por defecto 'mvn test' solo ejecuta la suite completa.
+                         Los smoke se corren aparte con -Dtest=SmokeRunner. -->
+                    <includes>
+                        <include>**/UsuariosRunner.java</include>
+                    </includes>
+                    <systemProperties>
+                        <karate.options>${karate.options}</karate.options>
+                        <karate.env>${karate.env}</karate.env>
+                    </systemProperties>
+                    <argLine>-Dfile.encoding=UTF-8</argLine>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
